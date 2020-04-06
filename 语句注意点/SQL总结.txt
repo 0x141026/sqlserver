@@ -1,0 +1,33 @@
+一、1.sqlserver 不支持自然连接（自然连接会将重复的字段去掉保留一个但是inner join
+会保留相同的字段名）
+2.等值连接的两种两种语法格式：
+	select * from Student inner join SC on Student.Sno=SC.Sno;
+	select * from Student,SC where Student.Sno=SC.Sno;
+3.聚合函数min、max等如果用在分组（group by）之后是根据分的各个组进行聚合！
+	即先分组，再在每个组中的数据进行聚合，所以有几个组就会返回几个记录。
+	切记不是在分组之后显示的进行聚合，因为这样只会返回一条记录！！
+4.交叉连接（笛卡儿积）：生成两表行数相乘行数大小的数据表，再根据where条件过滤
+	select * from a, b where a.id=b.id
+	等价于select * from a cross join b where a.id=b.id
+
+二、5.select into 新表名 from 旧表名：
+	不会吧旧表的约束（主键(创建的时候自动生成主键唯一聚集索引)、not null、unique、primary key、foreign key、 ）、索引等复制过来，
+	只是单纯的把表的结构和数据项copy过来！主键什么的需要自己加！
+	P.S. primary key是not null和unique结合
+	
+三、6.约束unique的机制和索引（比如说unique index）是不同的！
+  索引是在一列或多列上创建的是要占用系统资源的。
+创建[唯一]索引:
+	ALTER TABLE 表名 ADD index index_name (column_list)
+	ALTER TABLE 表名 ADD unique index_name (column_list)
+删除索引：
+	ALTER TABLE 表名 DROP INDEX c;
+7.修改表结构，比如说新增、删除约束的语法
+新增：alter table 表名
+	  add constraint 约束名 unique (列1[，列2...])
+删除：alter table 表名
+	  drop constraint 约束名
+	  
+8.distinct去掉重复的列值
+		！select distinct a, b, c from 表名，
+		等价于select  a, b, c from 表名 group by a, b c
